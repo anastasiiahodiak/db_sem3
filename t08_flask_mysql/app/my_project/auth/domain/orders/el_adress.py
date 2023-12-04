@@ -7,7 +7,7 @@ class ElAdress(db.Model):
     idel_adress = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(45), nullable=True)
     client_idclient = db.Column(db.Integer, db.ForeignKey('client.idclient'), nullable=False)
-
+    checks=db.relationship('Check',backref="el_adress")
     def __repr__(self) -> str:
         return f"ElAdress(idel_adress={self.idel_adress}, name={self.name}, client_idclient={self.client_idclient})"
 
@@ -15,7 +15,8 @@ class ElAdress(db.Model):
         return {
             'idel_adress': self.idel_adress,
             'name': self.name,
-            'client_idclient': self.client_idclient
+            'client_idclient': self.client_idclient,
+            'client_info': self.client.put_into_dto()
         }
 
     @staticmethod

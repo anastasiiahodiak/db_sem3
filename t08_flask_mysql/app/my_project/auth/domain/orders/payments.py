@@ -5,9 +5,11 @@ class Payments(db.Model):
     __tablename__ = "payments"
 
     idpayments = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    type_payment_idtype_payment = db.Column(db.Integer, nullable=False)
+    type_payment_idtype_payment = db.Column(db.Integer, db.ForeignKey('type_payment.idtype_payment'), nullable=False)
     amount = db.Column(db.DECIMAL, nullable=False)
     debt = db.Column(db.DECIMAL, nullable=False)
+    treasury=db.relationship('Treasury',backref="payments")
+    transactions=db.relationship('Transaction',backref="payment")
 
     def __repr__(self) -> str:
         return f"Payments(idpayments={self.idpayments}, type_payment_idtype_payment={self.type_payment_idtype_payment}, amount={self.amount}, debt={self.debt})"
@@ -16,6 +18,9 @@ class Payments(db.Model):
         return {
             'idpayments': self.idpayments,
             'type_payment_idtype_payment': self.type_payment_idtype_payment,
+            'type_payment_info': {
+            'idtype_payment': self.type_payment.idtype_payment,
+            'type': self.type_payment.type},
             'amount': self.amount,
             'debt': self.debt
         }
@@ -25,5 +30,6 @@ class Payments(db.Model):
         return Payments(
             type_payment_idtype_payment=payments_dict['type_payment_idtype_payment'],
             amount=payments_dict['amount'],
-            debt=payments_dict['debt']
+            debt=payments_dict['debt'],
+
         )

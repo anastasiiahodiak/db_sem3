@@ -17,7 +17,8 @@ class BankDetails(db.Model):
             'idbank_details': self.idbank_details,
             'bank_name': self.bank_name,
             'bank_code': self.bank_code,
-            'account_idaccount': self.account_idaccount
+            'account_idaccount': self.account_idaccount,
+            'account_info': self.account.put_into_dto(extra_info=False)
         }
 
     @staticmethod

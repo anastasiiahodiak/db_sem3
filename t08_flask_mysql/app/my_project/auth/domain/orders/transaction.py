@@ -12,18 +12,16 @@ class Transaction(db.Model):
     number = db.Column(db.Integer, nullable=False)
     account_idaccount = db.Column(db.Integer, db.ForeignKey('account.idaccount'), nullable=False)
     check_idcheck = db.Column(db.Integer, db.ForeignKey('check.idcheck'), nullable=False)
-    payments_idpayments = db.Column(db.Integer, nullable=False)
-    payments_type_payment_idtype_payment = db.Column(db.Integer, nullable=False)
+    payments_idpayments = db.Column(db.Integer,  db.ForeignKey('payments.idpayments'), nullable=False)
 
     def __repr__(self) -> str:
         return (f"Transaction(idtransactions={self.idtransactions}, amount={self.amount}, "
                 f"timestamp='{self.timestamp}', status='{self.status}', number={self.number}, "
                 f"account_idaccount={self.account_idaccount}, check_idcheck={self.check_idcheck}, "
-                f"payments_idpayments={self.payments_idpayments}, "
-                f"payments_type_payment_idtype_payment={self.payments_type_payment_idtype_payment})")
+                f"payments_idpayments={self.payments_idpayments})")
 
     def put_into_dto(self) -> Dict[str, Any]:
-        return {
+        dto =  {
             'idtransactions': self.idtransactions,
             'amount': self.amount,
             'timestamp': str(self.timestamp),
@@ -32,8 +30,14 @@ class Transaction(db.Model):
             'account_idaccount': self.account_idaccount,
             'check_idcheck': self.check_idcheck,
             'payments_idpayments': self.payments_idpayments,
-            'payments_type_payment_idtype_payment': self.payments_type_payment_idtype_payment
+            'check_info': self.check.put_into_dto(),
+            'payment_info': self.payment.put_into_dto()
         }
+
+
+
+
+        return dto;
 
     @staticmethod
     def create_from_dto(transaction_dict: Dict[str, Any]):
@@ -45,5 +49,4 @@ class Transaction(db.Model):
             account_idaccount=transaction_dict['account_idaccount'],
             check_idcheck=transaction_dict['check_idcheck'],
             payments_idpayments=transaction_dict['payments_idpayments'],
-            payments_type_payment_idtype_payment=transaction_dict['payments_type_payment_idtype_payment']
         )

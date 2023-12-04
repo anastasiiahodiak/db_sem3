@@ -10,6 +10,7 @@ class Treasury(db.Model):
     account_idaccount = db.Column(db.Integer, db.ForeignKey('account.idaccount'), nullable=False)
     payments_idpayments = db.Column(db.Integer, db.ForeignKey('payments.idpayments'), nullable=False)
 
+    cashbacks= db.relationship('Cashback', backref="treasury")
     def __repr__(self) -> str:
         return f"Treasury(idtreasury={self.idtreasury}, amount_money={self.amount_money}, annual_percentage={self.annual_percentage}, account_idaccount={self.account_idaccount}, payments_idpayments={self.payments_idpayments})"
 
@@ -19,7 +20,9 @@ class Treasury(db.Model):
             'amount_money': self.amount_money,
             'annual_percentage': self.annual_percentage,
             'account_idaccount': self.account_idaccount,
-            'payments_idpayments': self.payments_idpayments
+            'account_info': self.account.put_into_dto(),
+            'payments_idpayments': self.payments_idpayments,
+            'payments_info': self.payments.put_into_dto()
         }
 
     @staticmethod

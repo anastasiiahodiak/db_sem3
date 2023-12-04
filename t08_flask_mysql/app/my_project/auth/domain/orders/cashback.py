@@ -8,7 +8,6 @@ class Cashback(db.Model):
     percentage = db.Column(db.DECIMAL(10, 0), nullable=False)
     date_time = db.Column(db.DATETIME, nullable=True)
     treasury_idtreasury = db.Column(db.Integer, db.ForeignKey('treasury.idtreasury'), nullable=False)
-    treasury_payments_idpayments = db.Column(db.Integer, db.ForeignKey('treasury.payments_idpayments'), nullable=False)
 
     def __repr__(self) -> str:
         return f"Cashback(idcashback={self.idcashback}, percentage={self.percentage}, date_time={self.date_time}, treasury_idtreasury={self.treasury_idtreasury}, treasury_payments_idpayments={self.treasury_payments_idpayments})"
@@ -19,7 +18,7 @@ class Cashback(db.Model):
             'percentage': self.percentage,
             'date_time': self.date_time,
             'treasury_idtreasury': self.treasury_idtreasury,
-            'treasury_payments_idpayments': self.treasury_payments_idpayments
+            'treasury_info':self.treasury.put_into_dto()
         }
 
     @staticmethod
@@ -28,5 +27,4 @@ class Cashback(db.Model):
             percentage=cashback_dict['percentage'],
             date_time=cashback_dict['date_time'],
             treasury_idtreasury=cashback_dict['treasury_idtreasury'],
-            treasury_payments_idpayments=cashback_dict['treasury_payments_idpayments']
         )

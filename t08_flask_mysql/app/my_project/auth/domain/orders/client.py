@@ -8,6 +8,8 @@ class Client(db.Model):
     name = db.Column(db.String(45), nullable=False)
     surname = db.Column(db.String(45), nullable=False)
 
+    el_adresses = db.relationship("ElAdress", backref="client")
+    accounts = db.relationship("Account", backref="client")
     def __repr__(self) -> str:
         return f"Client(idclient={self.idclient}, name='{self.name}', surname='{self.surname}')"
 
